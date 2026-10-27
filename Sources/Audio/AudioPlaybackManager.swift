@@ -1,5 +1,6 @@
 import Foundation
 import AVFoundation
+import Combine
 #if canImport(MediaPlayer)
 import MediaPlayer
 #endif
@@ -35,9 +36,7 @@ enum AudioError: Error, LocalizedError {
 }
 
 /// Manages audio playback, queue, lock screen controls, and audio session.
-@available(iOS 17.0, macOS 14.0, *)
-@Observable
-final class AudioPlaybackManager {
+final class AudioPlaybackManager: ObservableObject {
 
     static let shared = AudioPlaybackManager()
 
@@ -51,25 +50,25 @@ final class AudioPlaybackManager {
     private var timeObserver: Any?
 
     /// Current playback state.
-    var playbackState: PlaybackState = .stopped
+    @Published var playbackState: PlaybackState = .stopped
 
     /// Currently playing track, if any.
-    var currentTrack: Track?
+    @Published var currentTrack: Track?
 
     /// Playback queue.
-    var queue: [Track] = []
+    @Published var queue: [Track] = []
 
     /// Index of the currently playing track in the queue.
-    var queueIndex: Int = 0
+    @Published var queueIndex: Int = 0
 
     /// Current playback progress in seconds.
-    var currentTime: TimeInterval = 0
+    @Published var currentTime: TimeInterval = 0
 
     /// Track duration in seconds.
-    var duration: TimeInterval = 0
+    @Published var duration: TimeInterval = 0
 
     /// Whether the player is currently buffering.
-    var isBuffering: Bool = false
+    @Published var isBuffering: Bool = false
 
     /// Volume (0.0 to 1.0).
     var volume: Float {
@@ -78,10 +77,10 @@ final class AudioPlaybackManager {
     }
 
     /// Whether repeat is enabled.
-    var isRepeatEnabled: Bool = false
+    @Published var isRepeatEnabled: Bool = false
 
     /// Whether shuffle is enabled.
-    var isShuffleEnabled: Bool = false
+    @Published var isShuffleEnabled: Bool = false
 
     private let client = YouTubeMusicClient()
 

@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Auto-scrolling, karaoke-style lyrics view synced with playback time.
+@available(iOS 13.0, macOS 10.15, *)
 struct SyncedLyricsView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
 
@@ -158,6 +159,7 @@ struct SyncedLyricsView: View {
 }
 
 /// Single lyric line row with active/highlighted state.
+@available(iOS 13.0, macOS 10.15, *)
 private struct LyricLineView: View {
     let line: LyricLine
     let isActive: Bool

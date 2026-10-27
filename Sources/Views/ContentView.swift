@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Main shell: persistent tab navigation with a floating mini-player at the bottom.
+@available(iOS 13.0, macOS 10.15, *)
 struct ContentView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
     @State private var selectedTab: Tab = .home

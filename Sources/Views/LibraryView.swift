@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Library tab: user playlists and recently played.
+@available(iOS 13.0, macOS 10.15, *)
 struct LibraryView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
 
@@ -42,6 +43,7 @@ struct LibraryView: View {
 }
 
 /// Playlist row.
+@available(iOS 13.0, macOS 10.15, *)
 private struct PlaylistRow: View {
     let playlist: Playlist
 

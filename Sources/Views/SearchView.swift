@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// Search tab: real-time search with song/artist/album filters.
+@available(iOS 13.0, macOS 10.15, *)
 struct SearchView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
     @StateObject private var client = YouTubeMusicClient()
@@ -102,6 +103,7 @@ struct SearchView: View {
 }
 
 /// Filter chip.
+@available(iOS 13.0, macOS 10.15, *)
 private struct Chip: View {
     let title: String
     let isSelected: Bool
