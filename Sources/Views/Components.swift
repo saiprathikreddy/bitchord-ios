@@ -148,7 +148,7 @@ private struct QueueRowView: View {
     let track: Track
     let index: Int
     let isPlaying: Bool
-    let onPlay: () -> Void
+    let onPlay: () async -> Void
 
     var body: some View {
         HStack(spacing: 12) {
@@ -178,6 +178,10 @@ private struct QueueRowView: View {
             }
         }
         .contentShape(Rectangle())
-        .onTapGesture(perform: onPlay)
+        .onTapGesture {
+            Task {
+                await onPlay()
+            }
+        }
     }
 }
