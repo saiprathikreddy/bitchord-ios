@@ -15,10 +15,7 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "BitChord",
-            path: "Sources",
-            resources: [
-                .process("Info.plist")
-            ]
+            path: "Sources"
         )
     ]
 )
