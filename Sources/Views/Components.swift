@@ -121,11 +121,13 @@ struct QueueDrawerView: View {
                 }
             }
             .navigationTitle("Queue")
+#if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") { dismiss() }
                 }
             }
+#endif
         }
     }
 
