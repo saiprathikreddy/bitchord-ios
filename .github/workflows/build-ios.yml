@@ -35,7 +35,13 @@ jobs:
         if: always()
         run: |
           if [ "${{ job.status }}" = "success" ]; then
-            echo "Build succeeded. Open BitChord.xcodeproj in Xcode, select your team, Product → Archive to create .ipa for sideloading."
+            echo "Build succeeded. Code compiles for iOS."
+            echo "To get a sideloadable .ipa:"
+            echo "  1. Clone this repo on a Mac"
+            echo "  2. Open the folder in Xcode (it auto-detects the Swift Package)"
+            echo "  3. Select your Apple ID team under Signing & Capabilities"
+            echo "  4. Product → Archive → Distribute App → export .ipa"
+            echo "  5. Sideload via Sideloadly/AltStore"
           else
             echo "Build failed. Check logs above."
           fi
