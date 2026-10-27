@@ -108,6 +108,7 @@ final class AudioPlaybackManager: ObservableObject {
     // MARK: - Setup
 
     private func setupAudioSession() {
+#if os(iOS)
         do {
             let session = AVAudioSession.sharedInstance()
             try session.setCategory(.playback, mode: .default, options: [.allowAirPlay, .allowBluetooth])
@@ -115,6 +116,7 @@ final class AudioPlaybackManager: ObservableObject {
         } catch {
             playbackState = .error(AudioError.sessionSetupFailed(error).errorDescription ?? error.localizedDescription)
         }
+#endif
     }
 
     private func setupTimeObserver() {
@@ -419,6 +421,7 @@ final class AudioPlaybackManager: ObservableObject {
     // MARK: - Interruption Handling
 
     func handleInterruption(_ notification: Notification) {
+#if os(iOS)
         guard let typeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
               let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
         switch type {
@@ -433,5 +436,6 @@ final class AudioPlaybackManager: ObservableObject {
         @unknown default:
             break
         }
+#endif
     }
 }

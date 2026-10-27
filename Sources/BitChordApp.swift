@@ -1,6 +1,7 @@
 import SwiftUI
 
-@available(iOS 13.0, macOS 10.15, *)
+#if os(iOS)
+@available(iOS 17.0, *)
 @main
 struct BitChordApp: App {
     @StateObject private var audioManager = AudioPlaybackManager.shared
@@ -15,3 +16,13 @@ struct BitChordApp: App {
         }
     }
 }
+#else
+@main
+struct BitChordApp: App {
+    var body: some Scene {
+        WindowGroup {
+            Text("BitChord is iOS-only")
+        }
+    }
+}
+#endif

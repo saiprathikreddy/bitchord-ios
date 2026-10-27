@@ -106,34 +106,11 @@ struct QueueDrawerView: View {
             List {
                 Section("Up Next") {
                     ForEach(Array(audioManager.queue.enumerated()), id: \.element.id) { index, track in
-                        HStack(spacing: 12) {
-                            Text("\(index + 1)")
-                                .font(.system(size: 13, weight: .medium))
-                                .foregroundColor(index == audioManager.queueIndex ? .red : .secondary)
-                                .frame(width: 20)
-
-                            AsyncArtwork(url: track.artworkURL, size: 44, cornerRadius: 6)
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(track.title)
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(index == audioManager.queueIndex ? .red : .primary)
-                                    .lineLimit(1)
-                                Text(track.artist.name)
-                                    .font(.system(size: 12, weight: .regular))
-                                    .foregroundColor(.secondary)
-                            }
-                            .lineLimit(1)
-
-                            Spacer()
-
-                            if index == audioManager.queueIndex {
-                                nowPlayingIndicator
-                            }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            Task {
+                        QueueRowView(
+                            track: track,
+                            index: index,
+                            isPlaying: index == audioManager.queueIndex,
+                            onPlay: {
                                 audioManager.queueIndex = index
                                 audioManager.currentTrack = audioManager.queue[index]
                                 try? await audioManager.loadStream(for: track)
@@ -141,7 +118,7 @@ struct QueueDrawerView: View {
                                 audioManager.playbackState = .playing
                                 dismiss()
                             }
-                        }
+                        )
                         .listRowBackground(index == audioManager.queueIndex ? Color.red.opacity(0.12) : Color.clear)
                     }
                     .onDelete(perform: deleteTracks)
@@ -167,5 +144,44 @@ struct QueueDrawerView: View {
     private var nowPlayingIndicator: some View {
         Image(systemName: "play.circle.fill")
             .foregroundColor(.red)
+    }
+}
+
+@available(iOS 17.0, macOS 14.0, *)
+private struct QueueRowView: View {
+    let track: Track
+    let index: Int
+    let isPlaying: Bool
+    let onPlay: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Text("\(index + 1)")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(isPlaying ? .red : .secondary)
+                .frame(width: 20)
+
+            AsyncArtwork(url: track.artworkURL, size: 44, cornerRadius: 6)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(track.title)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(isPlaying ? .red : .primary)
+                    .lineLimit(1)
+                Text(track.artist.name)
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(.secondary)
+            }
+            .lineLimit(1)
+
+            Spacer()
+
+            if isPlaying {
+                Image(systemName: "play.circle.fill")
+                    .foregroundColor(.red)
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onPlay)
     }
 }
