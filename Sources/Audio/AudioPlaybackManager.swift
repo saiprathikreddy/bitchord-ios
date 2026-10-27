@@ -1,8 +1,12 @@
 import Foundation
 import AVFoundation
+#if canImport(MediaPlayer)
 import MediaPlayer
+#endif
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#endif
 
 /// Playback state of the audio engine.
 enum PlaybackState: Equatable {

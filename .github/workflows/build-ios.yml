@@ -28,16 +28,13 @@ jobs:
       - name: Resolve Swift Package dependencies
         run: swift package resolve
 
-      - name: Build Swift package (verify compilation)
-        run: swift build --configuration release
-
       - name: Generate Xcode project from Swift Package
         run: swift package generate-xcodeproj --output BitChord.xcodeproj
 
       - name: Show available schemes
         run: xcodebuild -list -project BitChord.xcodeproj
 
-      - name: Build for iOS Simulator (verify Xcode project compiles)
+      - name: Build for iOS Simulator (Release)
         run: |
           xcodebuild -project BitChord.xcodeproj \
             -scheme BitChord \
@@ -45,13 +42,6 @@ jobs:
             -sdk iphonesimulator \
             -destination "platform=iOS Simulator,OS=17.0,name=iPhone 15" \
             build
-
-      - name: Upload Xcode project as artifact (for manual archive)
-        uses: actions/upload-artifact@v4
-        with:
-          name: BitChord-xcodeproj
-          path: BitChord.xcodeproj/**
-          retention-days: 30
 
       - name: Build status
         if: always()
