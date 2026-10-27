@@ -35,6 +35,7 @@ enum AudioError: Error, LocalizedError {
 }
 
 /// Manages audio playback, queue, lock screen controls, and audio session.
+@available(iOS 17.0, macOS 14.0, *)
 @Observable
 final class AudioPlaybackManager {
 
