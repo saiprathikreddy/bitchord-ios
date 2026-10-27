@@ -2,46 +2,44 @@ name: Build BitChord iOS
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ "main", "master" ]
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  build:
-    name: Build & Verify
-    runs-on: macos-latest
-    timeout-minutes: 60
+  build-ios:
+    runs-on: macos-14
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Select Xcode version
+      - name: Set up Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+
+      - name: Build Unsigned .app Bundle
         run: |
-          echo "Xcode: $(xcodebuild -version | head -n 1)"
+          xcodebuild build \
+            -scheme BitChord \
+            -destination 'generic/platform=iOS' \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            BUILD_DIR=build
 
-      - name: Resolve Swift Package dependencies
-        run: swift package resolve
-
-      - name: Build Swift package (verify compilation)
-        run: swift build --configuration release
-
-      - name: Build status
-        if: always()
+      - name: Package into Unsigned .ipa
         run: |
-          if [ "${{ job.status }}" = "success" ]; then
-            echo "Build succeeded. Code compiles for iOS."
-            echo "To get a sideloadable .ipa:"
-            echo "  1. Clone this repo on a Mac"
-            echo "  2. Open the folder in Xcode (it auto-detects the Swift Package)"
-            echo "  3. Select your Apple ID team under Signing & Capabilities"
-            echo "  4. Product → Archive → Distribute App → export .ipa"
-            echo "  5. Sideload via Sideloadly/AltStore"
-          else
-            echo "Build failed. Check logs above."
+          mkdir -p Payload
+          APP_PATH=$(find build -name "*.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: .app bundle not found!"
+            exit 1
           fi
+          cp -R "$APP_PATH" Payload/
+          zip -r BitChord-unsigned.ipa Payload
+
+      - name: Upload .ipa Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BitChord-unsigned-ipa
+          path: BitChord-unsigned.ipa
