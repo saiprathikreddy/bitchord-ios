@@ -4,7 +4,6 @@ import SwiftUI
 @available(iOS 17.0, macOS 14.0, *)
 struct HomeView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
-    @StateObject private var client = YouTubeMusicClient()
 
     @State private var tracks: [Track] = []
     @State private var isLoading = false
@@ -58,14 +57,14 @@ struct HomeView: View {
 
                 if let error {
                     Text(error)
-                        .foregroundStyle(.red)
+                        .foregroundColor(.red)
                         .padding(.horizontal, 20)
                 }
 
                 Spacer(minLength: 100)
             }
         }
-        .task(id: client) {
+        .task(id: YouTubeMusicClient.shared) {
             await loadInitial()
         }
         .refreshable {
@@ -73,11 +72,12 @@ struct HomeView: View {
         }
     }
 
+    @ViewBuilder
     private func sectionHeader(_ title: String) -> some View {
         HStack {
             Text(title)
                 .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(.primary)
+                .foregroundColor(.primary)
             Spacer()
         }
         .padding(.horizontal, 20)
@@ -87,7 +87,7 @@ struct HomeView: View {
         isLoading = true
         defer { isLoading = false }
         do {
-            let result = try await client.search(query: "popular music", filter: .songs)
+            let result = try await YouTubeMusicClient.shared.search(query: "popular music", filter: .songs)
             self.tracks = result.tracks
         } catch {
             self.error = error.localizedDescription
@@ -106,11 +106,11 @@ private struct QuickPickCard: View {
             AsyncArtwork(url: track.artworkURL, size: 150, cornerRadius: 16)
             Text(track.title)
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(.primary)
+                .foregroundColor(.primary)
                 .lineLimit(2)
             Text(track.artist.name)
                 .font(.system(size: 12, weight: .regular))
-                .foregroundStyle(.secondary)
+                .foregroundColor(.secondary)
                 .lineLimit(1)
         }
         .frame(width: 150)

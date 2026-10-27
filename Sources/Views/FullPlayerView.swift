@@ -78,7 +78,7 @@ struct FullPlayerView: View {
                     } label: {
                         Image(systemName: "chevron.down")
                             .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(.secondary)
+                            .foregroundColor(.secondary)
                             .padding(10)
                             .background(.ultraThinMaterial, in: Circle())
                     }
@@ -106,11 +106,11 @@ struct FullPlayerView: View {
             HStack {
                 Text(audioManager.currentTime.formattedTime)
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(.secondary)
                 Spacer()
                 Text(track.duration.formattedTime)
                     .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(.secondary)
             }
 
             GeometryReader { geometry in
@@ -168,7 +168,7 @@ struct FullPlayerView: View {
             } label: {
                 Image(systemName: "backward.fill")
                     .font(.system(size: 26, weight: .semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundColor(.primary)
             }
             .buttonStyle(.plain)
 
@@ -178,7 +178,7 @@ struct FullPlayerView: View {
             } label: {
                 Image(systemName: audioManager.playbackState == .playing ? "pause.fill" : "play.fill")
                     .font(.system(size: 40, weight: .semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundColor(.primary)
             }
             .buttonStyle(.plain)
 
@@ -188,7 +188,7 @@ struct FullPlayerView: View {
             } label: {
                 Image(systemName: "forward.fill")
                     .font(.system(size: 26, weight: .semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundColor(.primary)
             }
             .buttonStyle(.plain)
         }
@@ -209,7 +209,7 @@ struct FullPlayerView: View {
             } label: {
                 Image(systemName: "list.bullet.rectangle")
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundStyle(.primary)
+                    .foregroundColor(.primary)
             }
             .buttonStyle(.plain)
 
@@ -223,7 +223,7 @@ struct FullPlayerView: View {
             } label: {
                 Image(systemName: "text.quote")
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundStyle(showLyrics ? .red : .primary)
+                    .foregroundColor(showLyrics ? .red : .primary)
             }
             .buttonStyle(.plain)
 
@@ -243,7 +243,7 @@ struct FullPlayerView: View {
         } label: {
             Image(systemName: systemName)
                 .font(.system(size: 22, weight: .medium))
-                .foregroundStyle(isOn ? .red : .primary)
+                .foregroundColor(isOn ? .red : .primary)
         }
         .buttonStyle(.plain)
         .symbolEffect(.bounce, value: isOn)
@@ -261,12 +261,12 @@ private struct ArtworkHeader: View {
 
             Text(track.title)
                 .font(.system(size: 34, weight: .bold, design: .rounded))
-                .foregroundStyle(.primary)
+                .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
 
             Text(track.artist.name)
                 .font(.system(size: 17, weight: .medium))
-                .foregroundStyle(.secondary)
+                .foregroundColor(.secondary)
         }
         .padding(.top, 10)
     }

@@ -4,7 +4,6 @@ import SwiftUI
 @available(iOS 17.0, macOS 14.0, *)
 struct SearchView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
-    @StateObject private var client = YouTubeMusicClient()
 
     @State private var query = ""
     @State private var filter: SearchFilter = .songs
@@ -17,7 +16,7 @@ struct SearchView: View {
                 // Search bar.
                 HStack(spacing: 10) {
                     Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
+                        .foregroundColor(.secondary)
                     TextField("Search songs, artists, albums", text: $query)
                         .textFieldStyle(.plain)
                         .onSubmit {
@@ -29,7 +28,7 @@ struct SearchView: View {
                             results = nil
                         } label: {
                             Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(.secondary)
+                                .foregroundColor(.secondary)
                         }
                         .buttonStyle(.plain)
                     }
@@ -82,7 +81,6 @@ struct SearchView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .navigationTitle("Search")
-            .navigationBarTitleDisplayMode(.inline)
         }
         .searchable(text: $query, prompt: "Search music")
         .onSubmit(of: .search) {
@@ -95,7 +93,7 @@ struct SearchView: View {
         isSearching = true
         defer { isSearching = false }
         do {
-            results = try await client.search(query: query, filter: filter)
+            results = try await YouTubeMusicClient.shared.search(query: query, filter: filter)
         } catch {
             results = nil
         }
@@ -113,7 +111,7 @@ private struct Chip: View {
         Button(action: action) {
             Text(title)
                 .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(isSelected ? .white : .primary)
+                .foregroundColor(isSelected ? .white : .primary)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 7)
                 .background(isSelected ? Color.red : Color.white.opacity(0.12), in: Capsule())

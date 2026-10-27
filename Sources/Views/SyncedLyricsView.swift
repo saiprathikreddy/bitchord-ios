@@ -19,7 +19,7 @@ struct SyncedLyricsView: View {
                 HStack {
                     Text("Lyrics")
                         .font(.system(size: 22, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.primary)
+                        .foregroundColor(.primary)
 
                     Spacer()
 
@@ -28,7 +28,7 @@ struct SyncedLyricsView: View {
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 22))
-                            .foregroundStyle(.secondary)
+                            .foregroundColor(.secondary)
                     }
                     .buttonStyle(.plain)
                 }
@@ -76,7 +76,7 @@ struct SyncedLyricsView: View {
                         systemImage: "text.quote",
                         description: Text("Synced lyrics are not available for this track.")
                     )
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(.secondary)
                 }
             }
 
@@ -86,10 +86,10 @@ struct SyncedLyricsView: View {
                 if let track = audioManager.currentTrack {
                     Text(track.title)
                         .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(.secondary)
+                        .foregroundColor(.secondary)
                     Text(track.artist.name)
                         .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(.secondary.opacity(0.7))
+                        .foregroundColor(.secondary.opacity(0.7))
                 }
             }
             .padding(.bottom, 30)
@@ -167,7 +167,7 @@ private struct LyricLineView: View {
     var body: some View {
         Text(line.text)
             .font(.system(size: isActive ? 20 : 16, weight: isActive ? .semibold : .regular, design: .rounded))
-            .foregroundStyle(isActive ? .white : Color.white.opacity(0.45))
+            .foregroundColor(isActive ? .white : Color.white.opacity(0.45))
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
             .contentShape(Rectangle())

@@ -25,7 +25,6 @@ struct LibraryView: View {
                 }
             }
             .navigationTitle("Library")
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 
@@ -53,17 +52,17 @@ private struct PlaylistRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(playlist.title)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundColor(.primary)
                     .lineLimit(1)
                 Text("\(playlist.trackCount) tracks")
                     .font(.system(size: 13, weight: .regular))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(.secondary)
                     .lineLimit(1)
             }
             Spacer()
             Image(systemName: "chevron.right")
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(.tertiary)
+                .foregroundColor(.tertiary)
         }
         .contentShape(Rectangle())
     }

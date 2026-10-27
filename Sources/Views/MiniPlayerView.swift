@@ -21,11 +21,11 @@ struct MiniPlayerView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(track.title)
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(.primary)
+                            .foregroundColor(.primary)
                             .lineLimit(1)
                         Text(track.artist.name)
                             .font(.system(size: 13, weight: .regular))
-                            .foregroundStyle(.secondary)
+                            .foregroundColor(.secondary)
                             .lineLimit(1)
                     }
 
@@ -38,7 +38,7 @@ struct MiniPlayerView: View {
                         Image(systemName: audioManager.playbackState == .playing ? "pause.circle.fill" : "play.circle.fill")
                             .font(.system(size: 28, weight: .regular))
                             .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(audioManager.playbackState == .playing ? .primary : .secondary)
+                            .foregroundColor(audioManager.playbackState == .playing ? .primary : .secondary)
                     }
                     .buttonStyle(.plain)
                     .padding(.trailing, 4)
@@ -50,7 +50,7 @@ struct MiniPlayerView: View {
                         Image(systemName: "forward.fill")
                             .font(.system(size: 18, weight: .semibold))
                             .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.secondary)
+                            .foregroundColor(.secondary)
                     }
                     .buttonStyle(.plain)
                 }

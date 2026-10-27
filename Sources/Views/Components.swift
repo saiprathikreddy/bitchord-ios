@@ -31,7 +31,7 @@ struct AsyncArtwork: View {
                     .overlay(
                         Image(systemName: "music.note")
                             .font(.system(size: size ?? 40, weight: .medium))
-                            .foregroundStyle(.secondary)
+                            .foregroundColor(.secondary)
                     )
             }
         }
@@ -75,11 +75,11 @@ struct TrackRowView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(track.title)
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.primary)
+                        .foregroundColor(.primary)
                         .lineLimit(1)
                     Text(track.artist.name)
                         .font(.system(size: 13, weight: .regular))
-                        .foregroundStyle(.secondary)
+                        .foregroundColor(.secondary)
                         .lineLimit(1)
                 }
 
@@ -87,7 +87,7 @@ struct TrackRowView: View {
 
                 Text(track.duration.formattedTime)
                     .font(.system(size: 13, weight: .medium, design: .monospaced))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(.secondary)
             }
             .contentShape(Rectangle())
         }
@@ -109,7 +109,7 @@ struct QueueDrawerView: View {
                         HStack(spacing: 12) {
                             Text("\(index + 1)")
                                 .font(.system(size: 13, weight: .medium))
-                                .foregroundStyle(index == audioManager.queueIndex ? .red : .secondary)
+                                .foregroundColor(index == audioManager.queueIndex ? .red : .secondary)
                                 .frame(width: 20)
 
                             AsyncArtwork(url: track.artworkURL, size: 44, cornerRadius: 6)
@@ -117,11 +117,11 @@ struct QueueDrawerView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(track.title)
                                     .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(index == audioManager.queueIndex ? .red : .primary)
+                                    .foregroundColor(index == audioManager.queueIndex ? .red : .primary)
                                     .lineLimit(1)
                                 Text(track.artist.name)
                                     .font(.system(size: 12, weight: .regular))
-                                    .foregroundStyle(.secondary)
+                                    .foregroundColor(.secondary)
                                     .lineLimit(1)
                             }
 
@@ -129,7 +129,7 @@ struct QueueDrawerView: View {
 
                             if index == audioManager.queueIndex {
                                 Image(systemName: "play.circle.fill")
-                                    .foregroundStyle(.red)
+                                    .foregroundColor(.red)
                             }
                         }
                         .contentShape(Rectangle())

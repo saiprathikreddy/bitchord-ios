@@ -4,7 +4,8 @@ import PackageDescription
 let package = Package(
     name: "BitChord",
     platforms: [
-        .iOS(.v17)
+        .iOS(.v17),
+        .macOS(.v14)
     ],
     products: [
         .executable(
