@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Floating bottom bar: thumbnail, title, artist, play/pause, progress bar.
 /// Tapping expands to FullPlayerView.
-@available(iOS 13.0, macOS 10.15, *)
+@available(iOS 17.0, macOS 14.0, *)
 struct MiniPlayerView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
 

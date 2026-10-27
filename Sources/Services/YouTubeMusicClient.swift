@@ -87,6 +87,8 @@ private struct PipedStreamFormat: Codable {
 
 actor YouTubeMusicClient {
 
+    static let shared = YouTubeMusicClient()
+
     private let session: URLSession
 
     /// Ordered list of public Piped instances. Unhealthy instances are skipped.

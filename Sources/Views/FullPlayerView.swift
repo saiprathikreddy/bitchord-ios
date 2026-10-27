@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Full-screen player with artwork, seeker, queue drawer, shuffle/repeat, and lyrics.
-@available(iOS 13.0, macOS 10.15, *)
+@available(iOS 17.0, macOS 14.0, *)
 struct FullPlayerView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
     @Binding var showFullPlayer: Bool

@@ -4,7 +4,7 @@ import UIKit
 #endif
 
 /// Async artwork loader with placeholder.
-@available(iOS 13.0, macOS 10.15, *)
+@available(iOS 17.0, macOS 14.0, *)
 struct AsyncArtwork: View {
     let url: URL?
     let size: CGFloat?
@@ -62,7 +62,7 @@ struct AsyncArtwork: View {
 }
 
 /// Reusable track row used in lists/grid.
-@available(iOS 13.0, macOS 10.15, *)
+@available(iOS 17.0, macOS 14.0, *)
 struct TrackRowView: View {
     let track: Track
     var onPlay: () -> Void
@@ -96,7 +96,7 @@ struct TrackRowView: View {
 }
 
 /// Queue drawer presented as a sheet from FullPlayerView.
-@available(iOS 13.0, macOS 10.15, *)
+@available(iOS 17.0, macOS 14.0, *)
 struct QueueDrawerView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
     @Environment(\.dismiss) private var dismiss

@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Home tab: recommendations, trending tracks, quick picks.
-@available(iOS 13.0, macOS 10.15, *)
+@available(iOS 17.0, macOS 14.0, *)
 struct HomeView: View {
     @EnvironmentObject private var audioManager: AudioPlaybackManager
     @StateObject private var client = YouTubeMusicClient()
@@ -96,7 +96,7 @@ struct HomeView: View {
 }
 
 /// Single quick-pick card.
-@available(iOS 13.0, macOS 10.15, *)
+@available(iOS 17.0, macOS 14.0, *)
 private struct QuickPickCard: View {
     let track: Track
     let onPlay: () -> Void
