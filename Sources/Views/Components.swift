@@ -111,11 +111,7 @@ struct QueueDrawerView: View {
                             index: index,
                             isPlaying: index == audioManager.queueIndex,
                             onPlay: {
-                                audioManager.queueIndex = index
-                                audioManager.currentTrack = audioManager.queue[index]
-                                try? await audioManager.loadStream(for: track)
-                                audioManager.player.play()
-                                audioManager.playbackState = .playing
+                                await audioManager.playQueueItem(at: index)
                                 dismiss()
                             }
                         )

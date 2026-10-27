@@ -253,15 +253,7 @@ final class AudioPlaybackManager: ObservableObject {
             playbackState = .stopped
             return
         }
-        currentTrack = queue[queueIndex]
-        do {
-            try await loadStream(for: currentTrack!)
-            player.play()
-            playbackState = .playing
-        } catch {
-            playbackState = .error(error.localizedDescription)
-        }
-        updateNowPlayingInfo()
+        await playQueueItem(at: queueIndex)
     }
 
     func skipToPrevious() async {
@@ -278,7 +270,14 @@ final class AudioPlaybackManager: ObservableObject {
         } else {
             return
         }
-        currentTrack = queue[queueIndex]
+        await playQueueItem(at: queueIndex)
+    }
+
+    /// Plays the queue item at the given index.
+    func playQueueItem(at index: Int) async {
+        guard index >= 0, index < queue.count else { return }
+        queueIndex = index
+        currentTrack = queue[index]
         do {
             try await loadStream(for: currentTrack!)
             player.play()
@@ -379,6 +378,7 @@ final class AudioPlaybackManager: ObservableObject {
             info[MPMediaItemPropertyAlbumTitle] = album.title
         }
         if let artworkURL = track.artworkURL {
+#if canImport(UIKit)
             Task { [weak self] in
                 let artwork = await self?.loadArtwork(from: artworkURL)
                 await MainActor.run {
@@ -388,6 +388,7 @@ final class AudioPlaybackManager: ObservableObject {
                     self.nowPlayingInfoCenter.nowPlayingInfo = updated
                 }
             }
+#endif
         }
         nowPlayingInfoCenter.nowPlayingInfo = info
     }
@@ -400,6 +401,7 @@ final class AudioPlaybackManager: ObservableObject {
     }
 
     /// Asynchronously loads track artwork and returns it as `MPMediaItemArtwork`.
+#if canImport(UIKit)
     private func loadArtwork(from url: URL) async -> MPMediaItemArtwork? {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
@@ -409,6 +411,7 @@ final class AudioPlaybackManager: ObservableObject {
             return nil
         }
     }
+#endif
 #else
     private func updateNowPlayingInfo() {}
     private func updateNowPlayingProgress() {}
