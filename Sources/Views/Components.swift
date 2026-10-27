@@ -128,8 +128,7 @@ struct QueueDrawerView: View {
                             Spacer()
 
                             if index == audioManager.queueIndex {
-                                Image(systemName: "play.circle.fill")
-                                    .foregroundColor(.red)
+                                nowPlayingIndicator
                             }
                         }
                         .contentShape(Rectangle())
@@ -149,7 +148,6 @@ struct QueueDrawerView: View {
                 }
             }
             .navigationTitle("Queue")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") { dismiss() }
@@ -163,5 +161,11 @@ struct QueueDrawerView: View {
         for index in sorted {
             audioManager.removeFromQueue(at: index)
         }
+    }
+
+    @ViewBuilder
+    private var nowPlayingIndicator: some View {
+        Image(systemName: "play.circle.fill")
+            .foregroundColor(.red)
     }
 }
