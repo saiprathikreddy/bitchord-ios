@@ -1,4 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 /// Async artwork loader with placeholder.
 struct AsyncArtwork: View {
@@ -41,6 +44,7 @@ struct AsyncArtwork: View {
     private func loadImage() async {
         isLoading = true
         image = nil
+#if canImport(UIKit)
         guard let url, let data = try? Data(contentsOf: url),
               let uiImage = UIImage(data: data) else {
             isLoading = false
@@ -50,6 +54,9 @@ struct AsyncArtwork: View {
             self.image = Image(uiImage: uiImage)
             self.isLoading = false
         }
+#else
+        isLoading = false
+#endif
     }
 }
 

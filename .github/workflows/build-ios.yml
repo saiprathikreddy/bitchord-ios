@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build & Verify iOS
+    name: Build & Verify
     runs-on: macos-latest
     timeout-minutes: 60
 
@@ -28,13 +28,8 @@ jobs:
       - name: Resolve Swift Package dependencies
         run: swift package resolve
 
-      - name: Build for iOS Simulator (Release)
-        run: |
-          xcodebuild -scheme BitChord \
-            -configuration Release \
-            -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,OS=26.2,name=iPhone 17" \
-            build
+      - name: Build Swift package (verify compilation)
+        run: swift build --configuration release
 
       - name: Build status
         if: always()

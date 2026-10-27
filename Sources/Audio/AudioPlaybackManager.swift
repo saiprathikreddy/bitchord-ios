@@ -40,6 +40,11 @@ final class AudioPlaybackManager {
 
     static let shared = AudioPlaybackManager()
 
+#if canImport(MediaPlayer)
+    private let commandCenter = MPRemoteCommandCenter.shared()
+    private let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+#endif
+
     private let player: AVQueuePlayer
     private var playerItem: AVPlayerItem?
     private var timeObserver: Any?
@@ -78,8 +83,6 @@ final class AudioPlaybackManager {
     var isShuffleEnabled: Bool = false
 
     private let client = YouTubeMusicClient()
-    private let commandCenter = MPRemoteCommandCenter.shared()
-    private let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
 
     private init() {
         let playerItem = AVPlayerItem(url: URL(string: "about:blank")!)
@@ -88,7 +91,9 @@ final class AudioPlaybackManager {
         self.player.volume = 1.0
 
         setupAudioSession()
+#if canImport(MediaPlayer)
         setupRemoteCommands()
+#endif
         setupTimeObserver()
         observePlayerItemReachedEnd()
     }
@@ -221,7 +226,9 @@ final class AudioPlaybackManager {
         currentTime = 0
         duration = 0
         queueIndex = 0
+#if canImport(MediaPlayer)
         nowPlayingInfoCenter.nowPlayingInfo = nil
+#endif
     }
 
     /// Seeks to a time in seconds.
@@ -328,6 +335,7 @@ final class AudioPlaybackManager {
 
     // MARK: - Now Playing & Remote Commands
 
+#if canImport(MediaPlayer)
     private func setupRemoteCommands() {
         commandCenter.playCommand.addTarget { [weak self] _ in
             self?.resume()
@@ -399,6 +407,10 @@ final class AudioPlaybackManager {
             return nil
         }
     }
+#else
+    private func updateNowPlayingInfo() {}
+    private func updateNowPlayingProgress() {}
+#endif
 
     @objc private func playerItemDidReachEnd(_ notification: Notification) {
         Task { await skipToNext() }
