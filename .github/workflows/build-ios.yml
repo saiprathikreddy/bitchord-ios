@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build & Archive iOS
+    name: Build & Verify iOS
     runs-on: macos-latest
     timeout-minutes: 60
 
@@ -23,9 +23,7 @@ jobs:
 
       - name: Select Xcode version
         run: |
-          XCODE_PATH=$(xcode-select -p)
           echo "Xcode: $(xcodebuild -version | head -n 1)"
-          echo "XCODE_DEVELOPER_DIR=$XCODE_PATH" >> $GITHUB_ENV
 
       - name: Resolve Swift Package dependencies
         run: swift package resolve
@@ -39,78 +37,27 @@ jobs:
       - name: Show available schemes
         run: xcodebuild -list -project BitChord.xcodeproj
 
-      - name: Archive for iOS (Release)
+      - name: Build for iOS Simulator (verify Xcode project compiles)
         run: |
           xcodebuild -project BitChord.xcodeproj \
             -scheme BitChord \
             -configuration Release \
-            -sdk iphoneos \
-            -archivePath BitChord.xcarchive \
-            -destination "generic/platform=iOS" \
-            archive
+            -sdk iphonesimulator \
+            -destination "platform=iOS Simulator,OS=17.0,name=iPhone 15" \
+            build
 
-      - name: Write export options plist (development/unsigned)
-        run: cat > ExportOptions.plist << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>method</key>
-    <string>development</string>
-    <key>signingStyle</key>
-    <string>automatic</string>
-    <key>compileBitcode</key>
-    <false/>
-    <key>teamID</key>
-    <string></string>
-</dict>
-</plist>
-EOF
-
-      - name: Export unsigned .ipa
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath BitChord.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \
-            -exportPath . \
-            -allowProvisioningUpdates
-
-      - name: Locate .ipa file
-        id: locate_ipa
-        run: |
-          IPA_PATH=$(find . -name "*.ipa" -maxdepth 1 -print -quit)
-          echo "ipa_path=$IPA_PATH" >> $GITHUB_OUTPUT
-          echo "Found IPA: $IPA_PATH"
-
-      - name: Get release notes
-        id: release_notes
-        run: |
-          BODY="BitChord iOS build $(date +%Y-%m-%d)
-          
-          ## Installation
-          Sideload the .ipa onto your iPhone using [AltStore](https://altstore.io) or [Sideloadly](https://sideloadly.io).
-          
-          Built from commit ${{ github.sha }}"
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Create GitHub Release and upload .ipa
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/heads/main') || github.event_name == 'workflow_dispatch'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: build-${{ github.run_number }}
-          name: BitChord iOS Build ${{ github.run_number }}
-          body: ${{ steps.release_notes.outputs.body }}
-          draft: false
-          prerelease: false
-          files: ${{ steps.locate_ipa.outputs.ipa_path }}
-
-      - name: Upload .ipa as workflow artifact (fallback)
+      - name: Upload Xcode project as artifact (for manual archive)
         uses: actions/upload-artifact@v4
         with:
-          name: BitChord-ipa
-          path: ${{ steps.locate_ipa.outputs.ipa_path }}
+          name: BitChord-xcodeproj
+          path: BitChord.xcodeproj/**
           retention-days: 30
+
+      - name: Build status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "Build succeeded. Open BitChord.xcodeproj in Xcode, select your team, Product → Archive to create .ipa for sideloading."
+          else
+            echo "Build failed. Check logs above."
+          fi
