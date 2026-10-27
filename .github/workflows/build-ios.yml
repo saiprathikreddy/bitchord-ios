@@ -29,7 +29,7 @@ jobs:
         run: swift package resolve
 
       - name: Build Swift package (verify compilation)
-        run: swift build --configuration Release
+        run: swift build --configuration release
 
       - name: Generate Xcode project from Swift Package
         run: swift package generate-xcodeproj --output BitChord.xcodeproj
