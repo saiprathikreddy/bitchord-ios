@@ -62,7 +62,7 @@ private struct PlaylistRow: View {
             Spacer()
             Image(systemName: "chevron.right")
                 .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.tertiary)
+                .foregroundColor(.secondary)
         }
         .contentShape(Rectangle())
     }

@@ -122,8 +122,8 @@ struct QueueDrawerView: View {
                                 Text(track.artist.name)
                                     .font(.system(size: 12, weight: .regular))
                                     .foregroundColor(.secondary)
-                                    .lineLimit(1)
                             }
+                            .lineLimit(1)
 
                             Spacer()
 

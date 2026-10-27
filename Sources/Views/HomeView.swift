@@ -64,7 +64,7 @@ struct HomeView: View {
                 Spacer(minLength: 100)
             }
         }
-        .task(id: YouTubeMusicClient.shared) {
+        .task {
             await loadInitial()
         }
         .refreshable {

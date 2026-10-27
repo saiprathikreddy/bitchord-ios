@@ -102,7 +102,7 @@ actor YouTubeMusicClient {
     private let maxRetriesPerInstance = 2
     private let retryDelayBase: TimeInterval = 1.0
 
-    nonisolated init() {
+    init() {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
         config.timeoutIntervalForRequest = 20
@@ -277,12 +277,13 @@ actor YouTubeMusicClient {
             for attempt in 1...maxRetriesPerInstance {
                 do {
                     return try await resolveStream(on: instance, trackID: trackID)
-                } catch YouTubeMusicError.rateLimited {
-                    lastError = error
-                    try? await sleep(for: retryDelayBase * Double(attempt))
-                    continue
-                } catch {
-                    lastError = error
+                } catch let err as YouTubeMusicError {
+                    if case .rateLimited = err {
+                        lastError = err
+                        try? await sleep(for: retryDelayBase * Double(attempt))
+                        continue
+                    }
+                    lastError = err
                     break
                 }
             }
