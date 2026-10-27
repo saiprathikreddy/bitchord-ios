@@ -28,16 +28,9 @@ jobs:
       - name: Resolve Swift Package dependencies
         run: swift package resolve
 
-      - name: Generate Xcode project from Swift Package
-        run: swift package generate-xcodeproj --output BitChord.xcodeproj
-
-      - name: Show available schemes
-        run: xcodebuild -list -project BitChord.xcodeproj
-
       - name: Build for iOS Simulator (Release)
         run: |
-          xcodebuild -project BitChord.xcodeproj \
-            -scheme BitChord \
+          xcodebuild -scheme BitChord \
             -configuration Release \
             -sdk iphonesimulator \
             -destination "platform=iOS Simulator,OS=17.0,name=iPhone 15" \
